@@ -9,7 +9,6 @@ date: '2022-06-11'
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ```{r load-libraries}
 pacman::p_load(
         tidyverse, # Data wrangling and visualisation
@@ -26,22 +25,53 @@ pacman::p_load(
 )
 ```
 
+```{r import-dataset}
+# Use import() from rio
+```
 
-```{r}
 
+```{r skim-dataset}
+# Use skim() from skimr
+# Note assessment of data
+```
+
+
+```{r clean-dataset}
+# Clean and preprocess data using janitor and tidyverse
+```
+
+
+```{r statistical-visualisation}
+# Stats visualisations using ggstatsplot
+# Note observations under exploratory section
+```
+
+
+```{r scatterplot-matrix}
+# Create a scatterplot matrix using ggpairs from GGally
+# Note observations under exploratory section
 ```
 
 ## Introduction
 
-
 ### Machine learning workflow
 
-1. Access and load the data
-2. Preprocess the data
-3. Derive features using the preprocessed data
-4. Train models using the features derived in step 3
-5. Iterate to find the best model
-6. Integrate the best-trained model into a production system
-
+1.  Access and load the data
+2.  Preprocess the data
+3.  Derive features using the preprocessed data
+4.  Train models using the features derived in step 3
+5.  Iterate to find the best model
+6.  Integrate the best-trained model into a production system
 
 ## Exploratory data analysis
+
+
+
+
+## Baseline model
+
+
+## Iterate
+
+
+## Evaluate model
