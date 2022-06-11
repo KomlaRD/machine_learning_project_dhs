@@ -55,12 +55,14 @@ df <- import(here("data","GHKR72FL.SAV")) # Import dataset from the data folder
 - Type of toilet facility ()
 - Weight in kg (HW2): 9994 for present, 9995 for Refused, 9996 for other; Divide weight by 10.
 - Region (V024): 1 for Western, 2 for Central, 3 for Greater Accra, 4 for Volta, 5 for Eastern, 5 for Ashanti, 7 for Brong Ahafo, 8 for Nothern, 9 for Upper East, 10 for Upper West
+- Source of drinking water (V113): 10 for Piped water, 20 for Tube well water, 32 for Unprotected well, 43 for River, 71 for Bottled water, 11 for Piped into dwelling, 21 for Tube well or borehole, 40 for Surface Water, 51 for rain water, 72 for Sachet water, 12 for Piped to yard/plot, 30 for Dug well, 41 for Protected spring, 61 for Tanker trunk, 96 for other, 13 for public tap/standpipe, 31 for protected well, 42 for unprotected spring, 62 for cart with small tank, and 97 for not a dejure resident   ; Recode to improved and non-improved sources of water
 
 
 
 
 ```{r column-selection}
-# Use select() function from tidyverse to select columns of intere
+# Use select() function from tidyverse to select columns of interest
+df$V113
 ```
 
 
