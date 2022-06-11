@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load-libraries}
 pacman::p_load(
-        tidyerse, # Data wrangling and visualisation
+        tidyverse, # Data wrangling and visualisation
         skimr, # Skim dataset
         rio, # Import dataset
         here, # Directory management
@@ -26,3 +26,22 @@ pacman::p_load(
 )
 ```
 
+
+```{r}
+
+```
+
+## Introduction
+
+
+### Machine learning workflow
+
+1. Access and load the data
+2. Preprocess the data
+3. Derive features using the preprocessed data
+4. Train models using the features derived in step 3
+5. Iterate to find the best model
+6. Integrate the best-trained model into a production system
+
+
+## Exploratory data analysis
