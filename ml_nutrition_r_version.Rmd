@@ -26,7 +26,7 @@ pacman::p_load(
 ```
 
 ```{r import-dataset}
-df <- import(here("data","GHKR72FL.SAV"))
+df <- import(here("data","GHKR72FL.SAV")) # Import dataset from the data folder
 ```
 
 
@@ -54,13 +54,13 @@ df <- import(here("data","GHKR72FL.SAV"))
 - Had diarrhea recently (H11): 0 for No, 1 for Yes, last 24 hours, 2 for Yes, last two weeks, 8 for don't know (Join the values for yes into one)
 - Type of toilet facility ()
 - Weight in kg (HW2): 9994 for present, 9995 for Refused, 9996 for other; Divide weight by 10.
+- Region (V024): 1 for Western, 2 for Central, 3 for Greater Accra, 4 for Volta, 5 for Eastern, 5 for Ashanti, 7 for Brong Ahafo, 8 for Nothern, 9 for Upper East, 10 for Upper West
 
 
 
 
 ```{r column-selection}
-# Use select() function from tidyverse to select columns of interest
-df$HW2
+# Use select() function from tidyverse to select columns of intere
 ```
 
 
