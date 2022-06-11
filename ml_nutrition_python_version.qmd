@@ -12,6 +12,28 @@ import seaborn as sns
 ```
 
 ```{python}
-
+# Read data using pandas
+# Assess data using pandas
+# Clean data using pandas
+# Create exploratory visualisations using matplotlib and seaborn
+# Baseline model using scikit-learn
+# Iterate using scikit-learn
+# Evaluate using scikit-learn
 ```
 
+## Introduction
+
+
+## Exploratory data analysis
+
+
+## Build model
+
+
+## Iterate
+
+
+## Evaluate 
+
+
+## Communicate results
