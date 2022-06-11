@@ -26,7 +26,41 @@ pacman::p_load(
 ```
 
 ```{r import-dataset}
-# Use import() from rio
+df <- import(here("data","GHKR72FL.SAV"))
+```
+
+
+
+## Variable selection
+
+- Divide the z-score variables by 100
+
+#### Outcome variables
+
+- WFH z-scores (HW72)
+- HFA z-scores (HW70)
+- WFA z-scores (HW71)
+
+#### Features
+
+- Type of place of residence (V102): 1 for Urban, 2 for Rural
+- child age in months (HW1)
+- Birth order number (B0RD)
+- Gender of the child (B4): 1 for Male, 2 for female
+- Birth weight in kg (M19): 9996: No weight; 9998: Don't know; Divide by 1000
+- Number of children 5 and under in household (V137)
+- Highest education level (v106): 0 for No education, 1 for Primary, 2 for Secondary, 3 for Higher
+- Wealth index (V190): 1 for Poorest, 2 for Poorer, 3 for Middle, 4 for Richer, 5 for Richest
+- Had diarrhea recently (H11): 0 for No, 1 for Yes, last 24 hours, 2 for Yes, last two weeks, 8 for don't know (Join the values for yes into one)
+- Type of toilet facility ()
+- Weight in kg (HW2): 9994 for present, 9995 for Refused, 9996 for other; Divide weight by 10.
+
+
+
+
+```{r column-selection}
+# Use select() function from tidyverse to select columns of interest
+df$HW2
 ```
 
 
@@ -54,9 +88,11 @@ pacman::p_load(
 
 ## Introduction
 
+Provide detailed information about the dataset
+
 ### Machine learning workflow
 
-1.  Access and load the data
+1.  Access and load the data: Completed
 2.  Preprocess the data
 3.  Derive features using the preprocessed data
 4.  Train models using the features derived in step 3
