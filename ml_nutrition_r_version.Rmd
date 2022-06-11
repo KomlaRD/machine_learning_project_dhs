@@ -1,0 +1,28 @@
+---
+title: Machine learning modelling of nutrition indicators in children under five years
+  in Ghana- R version
+output: html_document
+date: '2022-06-11'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-libraries}
+pacman::p_load(
+        tidyerse, # Data wrangling and visualisation
+        skimr, # Skim dataset
+        rio, # Import dataset
+        here, # Directory management
+        finalfit, # Model parameters and column labelling
+        ggstatsplot, # Statistical plots
+        GGally, # Scatterplot matrix
+        caret, # Machine learning
+        gtsummary, # Summary tables
+        janitor, # Data cleaning
+        parameters # Model parameters
+)
+```
+
