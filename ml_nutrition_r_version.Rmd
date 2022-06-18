@@ -61,7 +61,7 @@ df <- import(here("data","GHKR72FL.SAV")) # Import dataset from the data folder
 
 
 ```{r column-selection}
-# Use select() function from tidyverse to select columns of interest
+# Use select() function from tidyverse to select columns of interest //TODO: Child's height inclusion, z-score flags
 child <- df%>%
         select(HW72, #WFH z-scores
                HW70, # HFA z-scores
@@ -82,12 +82,45 @@ child <- df%>%
 
 
 
+```{r data-shape}
+dim <- dim(child) # Dimensions of dataset
+```
+
+```{r glimpse-dataset}
+ff_glimpse(child) #Overview of dataset including missing data
+```
+
+```{r}
+str(child) # Structure of dataset
+```
+
+
+
+## Assessment of data
+
+- There are `r dim[1]` observations in the dataset. The selected columns were `r dim[2]`.
+- Data column names are not descriptive.
+- Weight for height z-scores (HW72) has 3146 missing observations representing 53.5% of observations.
+- Height for age z-scores (HW70) has 3146 missing observations representing 53.5% of observations.
+- Weight for age z-scores (HW71) has 3146 missing observations representing 53.5% of observations.
+- Child's age in month (HW1) has 3102 missing observations representing 52.7% of observations.
+- Birth weight (M19) has 3 missing values representing 0.1% of observations.
+- Had diarrheoa (H11) has 291 missing values representing 4.9% of observations. 
+- Child's weight in kg has 3102 missing observations representing 52.7% of observations.
+
 
 ```{r skim-dataset}
 # Use skim() from skimr
 # Note assessment of data
 ```
 
+
+
+## Cleaning 
+
+- Divide z-score values (HW72, HW70, HW71) by 100.
+- Divide birthweight(M19) values by 1000 to convert into kg.
+- Convert type of residence into factor type.
 
 ```{r clean-dataset}
 # Clean and preprocess data using janitor and tidyverse
