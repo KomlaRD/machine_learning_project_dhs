@@ -90,11 +90,6 @@ dim <- dim(child) # Dimensions of dataset
 ff_glimpse(child) #Overview of dataset including missing data
 ```
 
-```{r}
-str(child) # Structure of dataset
-```
-
-
 
 ## Assessment of data
 
@@ -116,15 +111,36 @@ str(child) # Structure of dataset
 
 
 
-## Cleaning 
+## Cleaning or recoding
 
+- Change column names into descriptive names
 - Divide z-score values (HW72, HW70, HW71) by 100.
 - Divide birthweight(M19) values by 1000 to convert into kg.
-- Convert type of residence into factor type.
+- Convert type of residence (V102), sex (B4), Highest educational level (V106), wealh index (V190), Had diarrhoea recently (H11), region (V024), source of drinking water (V113)  into factor type.
+- Remove flaged z-score values.
+- Mutate z-scores values into malnourished defined by z-score < -2 and all others as normal
+```{r}
+?rename
+```
+ 
 
 ```{r clean-dataset}
 # Clean and preprocess data using janitor and tidyverse
+# Rename column names using rename()
+child%>%
+        rename(
+                #new_name = #old_name)
+        )
+# Recode variables
+child%>%
+        mutate(
+              
+        )
 ```
+
+
+
+## Exploratory data analysis
 
 
 ```{r statistical-visualisation}
@@ -151,7 +167,7 @@ Provide detailed information about the dataset
 5.  Iterate to find the best model
 6.  Integrate the best-trained model into a production system
 
-## Exploratory data analysis
+## Explanatory data analysis
 
 
 
