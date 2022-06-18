@@ -89,6 +89,11 @@ dim <- dim(child) # Dimensions of dataset
 ```{r glimpse-dataset}
 ff_glimpse(child) #Overview of dataset including missing data
 ```
+```{r drop-missing}
+child_final <- na.omit(child) # Drop missing observations
+dim_missing <- dim(missing) # Assess dimensions of the dataset
+dim_missing
+```
 
 
 ## Assessment of data
@@ -102,6 +107,25 @@ ff_glimpse(child) #Overview of dataset including missing data
 - Birth weight (M19) has 3 missing values representing 0.1% of observations.
 - Had diarrheoa (H11) has 291 missing values representing 4.9% of observations. 
 - Child's weight in kg has 3102 missing observations representing 52.7% of observations.
+- After droping misssing cases, number ended up as `r dim_msssing[1]` 
+
+
+
+```{r}
+ff_glimpse(missing)
+```
+
+```{r}
+missing_two<- child%>%
+        drop_na(
+                HW72
+        )
+
+```
+
+```{r}
+ff_glimpse(missing_two)
+```
 
 
 ```{r skim-dataset}
@@ -113,15 +137,32 @@ ff_glimpse(child) #Overview of dataset including missing data
 
 ## Cleaning or recoding
 
+- Remove missing values
 - Change column names into descriptive names
 - Divide z-score values (HW72, HW70, HW71) by 100.
 - Divide birthweight(M19) values by 1000 to convert into kg.
 - Convert type of residence (V102), sex (B4), Highest educational level (V106), wealh index (V190), Had diarrhoea recently (H11), region (V024), source of drinking water (V113)  into factor type.
 - Remove flaged z-score values.
 - Mutate z-scores values into malnourished defined by z-score < -2 and all others as normal
-```{r}
-?rename
-```
+
+
+
+- WFH z-scores (HW72)
+- HFA z-scores (HW70)
+- WFA z-scores (HW71)
+- Type of place of residence (V102): 1 for Urban, 2 for Rural
+- child age in months (HW1)
+- Birth order number (B0RD)
+- Gender of the child (B4): 1 for Male, 2 for female
+- Birth weight in kg (M19): 9996: No weight; 9998: Don't know; Divide by 1000
+- Number of children 5 and under in household (V137)
+- Highest education level (v106): 0 for No education, 1 for Primary, 2 for Secondary, 3 for Higher
+- Wealth index (V190): 1 for Poorest, 2 for Poorer, 3 for Middle, 4 for Richer, 5 for Richest
+- Had diarrhea recently (H11): 0 for No, 1 for Yes, last 24 hours, 2 for Yes, last two weeks, 8 for don't know (Join the values for yes into one)
+- Type of toilet facility ();
+- Weight in kg (HW2): 9994 for present, 9995 for Refused, 9996 for other; Divide weight by 10.
+- Region (V024): 1 for Western, 2 for Central, 3 for Greater Accra, 4 for Volta, 5 for Eastern, 5 for Ashanti, 7 for Brong Ahafo, 8 for Nothern, 9 for Upper East, 10 for Upper West
+- Source of drinking water (V113): 10 for Piped water, 20 for Tube well water, 32 for Unprotected well, 43 for River, 71 for Bottled water, 11 for Piped into dwelling, 21 for Tube well or borehole, 40 for Surface Water, 51 for rain water, 72 for Sachet water, 12 for Piped to yard/plot, 30 for Dug well, 41 for Protected spring, 61 for Tanker trunk, 96 for other, 13 for public tap/standpipe, 31 for protected well, 42 for unprotected spring, 62 for cart with small tank, and 97 for not a dejure resident   ; Recode to improved and non-improved sources of water
  
 
 ```{r clean-dataset}
@@ -129,13 +170,27 @@ ff_glimpse(child) #Overview of dataset including missing data
 # Rename column names using rename()
 child%>%
         rename(
-                #new_name = #old_name)
-        )
-# Recode variables
-child%>%
-        mutate(
-              
-        )
+                wh = HW72,
+                hfa = HW70,
+                wfa = HW71,
+                residence = V102,
+                age = HW1,
+                birth_order = BORD,
+                gender = B4,
+                bwt = M19,
+                num_child = V137,
+                educ_mum = V106,
+                wealth_index = V190,
+                diarrhea = H11,
+                wt = HW2,
+                region = V024,
+                source_water = V113
+                )
+# # Recode variables
+# child%>%
+#         mutate(
+#               
+#         )
 ```
 
 
