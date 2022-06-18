@@ -331,16 +331,16 @@ child_final <- child_final%>%
                                 "Other" = "96"
                          )%>%
                         ff_label("Source of drinking water"),
-                Wfh_cat = ifelse(
+                wfh_cat = ifelse(
                         wfh < -2, "Wasting",
                         "Normal"
                 )%>%
                         ff_label("Wasting"),
                 hfa_cat = ifelse(
-                        hfa <- 2, "Stunting",
+                        hfa < -2, "Stunting",
                         "Normal"
                 )%>%
-                        ff_label("stunting"),
+                        ff_label("Stunting"),
                 wfa_cat = ifelse(
                         wfa < -2, "Underweight",
                         "Normal"
@@ -407,7 +407,6 @@ Provide detailed information about the dataset
 6.  Integrate the best-trained model into a production system
 
 ## Explanatory data analysis
-
 
 
 
