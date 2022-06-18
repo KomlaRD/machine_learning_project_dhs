@@ -21,7 +21,8 @@ pacman::p_load(
         caret, # Machine learning
         gtsummary, # Summary tables
         janitor, # Data cleaning
-        parameters # Model parameters
+        parameters, # Model parameters
+        naniar # Handling missing values
 )
 ```
 
@@ -37,9 +38,9 @@ df <- import(here("data","GHKR72FL.SAV")) # Import dataset from the data folder
 
 #### Outcome variables
 
-- WFH z-scores (HW72)
-- HFA z-scores (HW70)
-- WFA z-scores (HW71)
+- WFH z-scores (HW72); 9996: height out of plausible limit, 9997: Age in days out of plausible limit, 9998: Flagged cases
+- HFA z-scores (HW70); 9996: height out of plausible limit, 9997: Age in days out of plausible limit, 9998: Flagged cases
+- WFA z-scores (HW71); 9996: height out of plausible limit, 9997: Age in days out of plausible limit, 9998: Flagged cases
 
 #### Features
 
@@ -89,12 +90,64 @@ dim <- dim(child) # Dimensions of dataset
 ```{r glimpse-dataset}
 ff_glimpse(child) #Overview of dataset including missing data
 ```
-```{r drop-missing}
-child_final <- na.omit(child) # Drop missing observations
-dim_missing <- dim(missing) # Assess dimensions of the dataset
-dim_missing
+
+
+
+```{r drop-unusual-outcome}
+# Dropped children with unusual nutritional indicators
+child <- child%>%
+        replace_with_na(
+                replace = list(
+                        HW72 = c(9996, 9997, 9998),
+                        HW70 = c(9996, 9997, 9998),
+                        HW71 = c(9996, 9997, 9998)
+                )
+        )
 ```
 
+
+```{r glimpse-after-outcome-drop}
+ff_glimpse(child)
+```
+
+
+
+```{r drop-missing}
+child_final <- na.omit(child) # Drop missing observations
+dim_new_df <- dim(child_final) # Assess dimensions of the dataset
+dim_new_df
+```
+
+```{r replace-birthweight-not-weighed-dont-know}
+# Replace unusual birthweight values
+child_final <- child_final%>%
+        replace_with_na(
+                replace = list(M19 = c(9996, 9998)
+                        
+                )
+        )
+```
+
+
+```{r replace-not-de-jeru-with-missing}
+# Replace not de jeru in source of drinking water with missing
+child_final <- child_final%>%
+        replace_with_na(
+                replace = list(V113 = 97
+                        
+                )
+        )
+```
+
+
+```{r drop-missing-after-birthweight-replace}
+child_final <- na.omit(child_final)
+```
+
+
+```{r glimpse-after-bwt-na}
+ff_glimpse(child_final)
+```
 
 ## Assessment of data
 
@@ -107,25 +160,8 @@ dim_missing
 - Birth weight (M19) has 3 missing values representing 0.1% of observations.
 - Had diarrheoa (H11) has 291 missing values representing 4.9% of observations. 
 - Child's weight in kg has 3102 missing observations representing 52.7% of observations.
-- After droping misssing cases, number ended up as `r dim_msssing[1]` 
+- After droping misssing cases, number ended up as `r dim_new_df[1]` 
 
-
-
-```{r}
-ff_glimpse(missing)
-```
-
-```{r}
-missing_two<- child%>%
-        drop_na(
-                HW72
-        )
-
-```
-
-```{r}
-ff_glimpse(missing_two)
-```
 
 
 ```{r skim-dataset}
@@ -137,13 +173,14 @@ ff_glimpse(missing_two)
 
 ## Cleaning or recoding
 
-- Remove missing values
-- Change column names into descriptive names
-- Divide z-score values (HW72, HW70, HW71) by 100.
+- Remove missing values: Completed
+- Change column names into descriptive names: Completed
+- Divide z-score values (HW72, HW70, HW71) by 100: Completed
 - Divide birthweight(M19) values by 1000 to convert into kg.
 - Convert type of residence (V102), sex (B4), Highest educational level (V106), wealh index (V190), Had diarrhoea recently (H11), region (V024), source of drinking water (V113)  into factor type.
 - Remove flaged z-score values.
 - Mutate z-scores values into malnourished defined by z-score < -2 and all others as normal
+- Remove unusual values from (HW72, HW70, HW71: 9996, 9997, 9998), (M19: 9996, 9998).
 
 
 
@@ -165,12 +202,12 @@ ff_glimpse(missing_two)
 - Source of drinking water (V113): 10 for Piped water, 20 for Tube well water, 32 for Unprotected well, 43 for River, 71 for Bottled water, 11 for Piped into dwelling, 21 for Tube well or borehole, 40 for Surface Water, 51 for rain water, 72 for Sachet water, 12 for Piped to yard/plot, 30 for Dug well, 41 for Protected spring, 61 for Tanker trunk, 96 for other, 13 for public tap/standpipe, 31 for protected well, 42 for unprotected spring, 62 for cart with small tank, and 97 for not a dejure resident   ; Recode to improved and non-improved sources of water
  
 
-```{r clean-dataset}
+```{r rename-columns}
 # Clean and preprocess data using janitor and tidyverse
 # Rename column names using rename()
-child%>%
+child_final <- child_final%>%
         rename(
-                wh = HW72,
+                wfh = HW72,
                 hfa = HW70,
                 wfa = HW71,
                 residence = V102,
@@ -186,13 +223,136 @@ child%>%
                 region = V024,
                 source_water = V113
                 )
-# # Recode variables
-# child%>%
-#         mutate(
-#               
-#         )
 ```
 
+
+```{r division}
+child_final<- child_final%>%
+        mutate(
+                # Divide nutritional indicators by 100
+                wfh = wfh/100,
+                hfa = hfa/100,
+                wfa = wfa/100,
+                # Divide birthweight
+                bwt = bwt/1000)
+```
+
+
+
+```{r recoding}
+# Recode variables
+child_final <- child_final%>%
+        mutate(
+                # Categorical variables
+                residence = factor(residence)%>%
+                        fct_recode("Urban" = "1",
+                                   "Rural" = "2")%>%
+                        ff_label("Type of place of residence"),
+                gender = factor(gender)%>%
+                        fct_recode(
+                                "Male" = "1",
+                                "Female" = "2"
+                        )%>%
+                        ff_label("Gender of child"),
+                educ_mum = factor(educ_mum)%>%
+                        fct_recode(
+                                "No education" = "0",
+                                "Primary" = "1",
+                                "Secondary" = "2",
+                                "Higher" = "3"
+                        )%>%
+                        fct_relevel(
+                                c(
+                                        "No education",
+                                        "Primary",
+                                        "Secondary",
+                                        "Higher"
+                                )
+                        )%>%
+                        ff_label("Mother's educational level"),
+                wealth_index = factor(wealth_index)%>%
+                        fct_recode(
+                                "Poorest" = "1",
+                                "Poorer" = "2",
+                                "Middle" = "3",
+                                "Richer" = "4",
+                                "Richest" = "5"
+                        )%>%
+                        fct_relevel(
+                                c("Poorest",
+                                  "Poorer",
+                                  "Middle",
+                                  "Richer",
+                                  "Richest")
+                        )%>%
+                        ff_label("Household wealth index"),
+                region = factor(region)%>%
+                        fct_recode(
+                                "Western" = "1",
+                                "Central" ="2",
+                                "Greater Accra" = "3",
+                                "Volta" = "4",
+                                "Eastern" = "5",
+                                "Ashanti" = "6",
+                                "Brong-Ahafo" = "7",
+                                "Nothern" = "8",
+                                "Upper East" = "9",
+                                "Upper West" = "10"
+                        )%>%
+                        ff_label("Region of residence"),
+                diarrhea = factor(diarrhea)%>%
+                        fct_recode(
+                                "No" = "0",
+                                "Yes" = "1",
+                                "Yes" = "2",
+                                "Don't know" = "8"
+                        )%>%
+                        ff_label("Child has diarrhoea"),
+                source_water = factor(source_water)%>%
+                        fct_recode(
+                                "Improved" = "10", # Pipe water
+                                "Improved" = "20", # Tube well water
+                                "Improved" = "71", # Bottle water
+                                "Improved" = "11", # Piped into dwelling
+                                "Improved" = "21", # Tube well/borehole
+                                "Improved" = "72", # Sachet water
+                                "Improved" = "12", # Piped into yard or plot
+                                "Improved" = "30", # Dugged well (open/protected)
+                                "Improved" = "31", # Protected well
+                                "Improved" = "41", # Protected spring
+                                "Improved" = "13", # Public tap/stand pipe
+                                "Improved" = "51", # Rainwater
+                                "Unimproved" = "32", # Unprotected well
+                                "Unimproved" = "40", # Surface water
+                                "Unimproved" = "42", # Unprotected spring
+                                "Unimproved" = "43", # River/dam/pond/spring/irrigation/canal
+                                "Unimproved" = "61", # Tanker truck
+                                "Unimproved" = "62", # Cart with small tank
+                                "Other" = "96"
+                         )%>%
+                        ff_label("Source of drinking water"),
+                Wfh_cat = ifelse(
+                        wfh < -2, "Wasting",
+                        "Normal"
+                )%>%
+                        ff_label("Wasting"),
+                hfa_cat = ifelse(
+                        hfa <- 2, "Stunting",
+                        "Normal"
+                )%>%
+                        ff_label("stunting"),
+                wfa_cat = ifelse(
+                        wfa < -2, "Underweight",
+                        "Normal"
+                )%>%
+                        ff_label("Underweight")
+        )
+```
+
+
+```{r glimpse-final-dataset}
+ff_glimpse(child_final)
+```
 
 
 ## Exploratory data analysis
