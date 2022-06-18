@@ -350,6 +350,30 @@ child_final <- child_final%>%
 ```
 
 
+```{r dummy-variables}
+child_final<- child_final%>%
+        mutate(
+                wfh_dummy = wfh_cat%>%
+                        fct_recode(
+                                "0" = "Normal",
+                                "1" = "Wasting"
+                        ),
+                
+                hfa_dummy = hfa_cat%>%
+                        fct_recode(
+                                "0" = "Normal",
+                                "1" = "Stunting"
+                        ),
+                
+                wfa_dummy = wfa_cat%>%
+                        fct_recode(
+                                "0" = "Normal",
+                                "1" = "Underweight"
+                        )
+        )
+```
+
+
 ```{r glimpse-final-dataset}
 ff_glimpse(child_final)
 ```
