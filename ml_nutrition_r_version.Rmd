@@ -52,7 +52,7 @@ df <- import(here("data","GHKR72FL.SAV")) # Import dataset from the data folder
 - Highest education level (v106): 0 for No education, 1 for Primary, 2 for Secondary, 3 for Higher
 - Wealth index (V190): 1 for Poorest, 2 for Poorer, 3 for Middle, 4 for Richer, 5 for Richest
 - Had diarrhea recently (H11): 0 for No, 1 for Yes, last 24 hours, 2 for Yes, last two weeks, 8 for don't know (Join the values for yes into one)
-- Type of toilet facility ()
+- Type of toilet facility ();
 - Weight in kg (HW2): 9994 for present, 9995 for Refused, 9996 for other; Divide weight by 10.
 - Region (V024): 1 for Western, 2 for Central, 3 for Greater Accra, 4 for Volta, 5 for Eastern, 5 for Ashanti, 7 for Brong Ahafo, 8 for Nothern, 9 for Upper East, 10 for Upper West
 - Source of drinking water (V113): 10 for Piped water, 20 for Tube well water, 32 for Unprotected well, 43 for River, 71 for Bottled water, 11 for Piped into dwelling, 21 for Tube well or borehole, 40 for Surface Water, 51 for rain water, 72 for Sachet water, 12 for Piped to yard/plot, 30 for Dug well, 41 for Protected spring, 61 for Tanker trunk, 96 for other, 13 for public tap/standpipe, 31 for protected well, 42 for unprotected spring, 62 for cart with small tank, and 97 for not a dejure resident   ; Recode to improved and non-improved sources of water
@@ -62,8 +62,25 @@ df <- import(here("data","GHKR72FL.SAV")) # Import dataset from the data folder
 
 ```{r column-selection}
 # Use select() function from tidyverse to select columns of interest
-df$V113
+child <- df%>%
+        select(HW72, #WFH z-scores
+               HW70, # HFA z-scores
+               HW71, # WFA z-scores
+               V102, # Type of place of residence
+               HW1, # Child age in months
+               BORD, # Birth order number
+               B4, # Gender of child
+               M19, # Birth weight of child
+               V137, # Number of children 5 and under
+               V106, # Highest education level
+               V190, # Wealth index
+               H11, # Had diarrhoea recently
+               HW2, # Weight of child
+               V024, # Region
+               V113) # Source of drinking water
 ```
+
+
 
 
 ```{r skim-dataset}
