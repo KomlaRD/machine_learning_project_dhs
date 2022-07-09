@@ -13,6 +13,28 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Exploratory data analysis
 
 
+```{r load-libraries}
+pacman::p_load(
+        tidyverse, # Data wrangling and visualisation
+        skimr, # Skim dataset
+        rio, # Import dataset
+        here, # Directory management
+        finalfit, # Model parameters and column labelling
+        ggstatsplot, # Statistical plots
+        GGally, # Scatterplot matrix
+        caret, # Machine learning
+        gtsummary, # Summary tables
+        janitor, # Data cleaning
+        parameters, # Model parameters
+        naniar # Handling missing values
+)
+```
+
+```{r import-clean-dataset}
+df <- import(here("data","clean_data.csv"))
+```
+
+
 ```{r statistical-visualisation}
 # Stats visualisations using ggstatsplot
 # Note observations under exploratory section
