@@ -1,0 +1,25 @@
+---
+title: Machine learning modelling of nutrition indicators in children under five years
+  in Ghana- EDA
+author: "Eric Anku"
+date: '2022-07-09'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exploratory data analysis
+
+
+```{r statistical-visualisation}
+# Stats visualisations using ggstatsplot
+# Note observations under exploratory section
+```
+
+
+```{r scatterplot-matrix}
+# Create a scatterplot matrix using ggpairs from GGally
+# Note observations under exploratory section
+```
