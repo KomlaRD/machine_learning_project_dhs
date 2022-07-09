@@ -378,6 +378,10 @@ child_final<- child_final%>%
 ff_glimpse(child_final)
 ```
 
+```{r export-clean-dataset}
+export(child_final, here("data","clean_data.csv")) #Export clean dataset
+```
+
 
 ## Exploratory data analysis
 
