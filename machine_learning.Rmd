@@ -1,0 +1,33 @@
+---
+title: "Machine learning"
+author: "Eric Anku"
+date: '2022-07-09'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r import-library}
+pacman::p_load(
+        tidyverse, # Data wrangling and visualisation
+        skimr, # Skim dataset
+        rio, # Import dataset
+        here, # Directory management
+        finalfit, # Model parameters and column labelling
+        ggstatsplot, # Statistical plots
+        GGally, # Scatterplot matrix
+        caret, # Machine learning
+        gtsummary, # Summary tables
+        janitor, # Data cleaning
+        parameters, # Model parameters
+        naniar # Handling missing values
+)
+```
+
+
+```{r import-dataset}
+import(here("data","clean_data.csv"))
+```
+
